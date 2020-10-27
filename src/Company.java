@@ -12,8 +12,7 @@ public class Company {
 
     public boolean inCompany(Distributor d) {
         //System.out.println(d.getName());
-        if(Distributor.relation(boss, d) == 1) return true;
-        else return false;
+        return Distributor.relation(boss, d) == 1;
     }
 
     public void addDistributor(Distributor newMember, Distributor superior) {
@@ -21,8 +20,14 @@ public class Company {
         //System.out.println("superior name: " + superior.getName());
         if(!inCompany(superior)) return;
         //System.out.println("in company");
-        if(superior.getLeftLeg() == null) superior.setLeftLeg(newMember);
-        else if(superior.getRightLeg() == null) superior.setRightLeg((newMember));
+        if(superior.getLeftLeg() == null) {
+            superior.setLeftLeg(newMember);
+            newMember.setSuperior(superior);
+        }
+        else if(superior.getRightLeg() == null) {
+            superior.setRightLeg((newMember));
+            newMember.setSuperior(superior);
+        }
         else {
             if(superior.getLeftLeg().numberOfInferiors() > superior.getRightLeg().numberOfInferiors())
                 addDistributor(newMember, superior.getRightLeg());
@@ -35,5 +40,6 @@ public class Company {
     public Distributor find(int ID) {
         return Distributor.find(boss, ID);
     }
+
 
 }

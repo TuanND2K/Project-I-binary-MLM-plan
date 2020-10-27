@@ -1,6 +1,5 @@
 public class Distributor {
-    public static final double commissionRate = 0.1;
-    private static int numOfDistributor = 0;
+    private static int IDSetter = 0;
     private int ID;
     private String name;
     private Distributor leftLeg;
@@ -8,10 +7,6 @@ public class Distributor {
     private Distributor superior;
     private int commission;
     private int numberOfProducts;
-
-    public static int getNumOfDistributor() {
-        return numOfDistributor;
-    }
 
     public int getID() {
         return ID;
@@ -69,8 +64,8 @@ public class Distributor {
     }
 
     public Distributor(String name) {
-        numOfDistributor++;
-        ID = numOfDistributor;
+        IDSetter++;
+        ID = IDSetter;
         this.name = name;
     }
 

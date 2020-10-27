@@ -13,7 +13,12 @@ public class Main {
         company.addDistributor(d3, boss);
         company.addDistributor(d4, d2);
         company.addDistributor(d5, d3);
-        System.out.println(boss.numberOfInferiors());
+
+        Sale sale = new Sale(company, 120);
+        sale.saleResult(boss);
+        System.out.println("commission of " + boss.getName() + " is " + sale.commission(boss));
+        System.out.println("total products of " + boss.getName() + " is " + sale.totalProducts(boss));
+
     }
 
 }
