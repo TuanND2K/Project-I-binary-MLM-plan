@@ -1,13 +1,35 @@
+import java.util.ArrayList;
+
 public class Company {
+
     private Distributor boss;
-    private int levels;
+    private String name;
+    private ArrayList<Distributor> memberList;
 
     public Distributor getBoss() {
         return boss;
     }
 
-    public Company(Distributor boss) {
+    public Company() {
+
+    }
+    public Company(Distributor boss, String name) {
         this.boss = boss;
+        this.name = name;
+        memberList = new ArrayList<>();
+        memberList.add(boss);
+    }
+
+    public ArrayList<Distributor> getMemberList() {
+        return memberList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean inCompany(Distributor d) {
@@ -15,24 +37,23 @@ public class Company {
         return Distributor.relation(boss, d) == 1;
     }
 
-    public void addDistributor(Distributor newMember, Distributor superior) {
-        //System.out.println("new member name: " + newMember.getName());
-        //System.out.println("superior name: " + superior.getName());
-        if(!inCompany(superior)) return;
-        //System.out.println("in company");
-        if(superior.getLeftLeg() == null) {
-            superior.setLeftLeg(newMember);
-            newMember.setSuperior(superior);
+    public void addDistributor(Distributor newMember, Distributor sponsor) {
+        if(!inCompany(sponsor)) return;
+        if(!memberList.contains(newMember)) memberList.add(newMember);
+        if(newMember.getSponsor() == null) newMember.setSponsor(sponsor);
+        if(sponsor.getLeftLeg() == null) {
+            sponsor.setLeftLeg(newMember);
+            newMember.setParent(sponsor);
         }
-        else if(superior.getRightLeg() == null) {
-            superior.setRightLeg((newMember));
-            newMember.setSuperior(superior);
+        else if(sponsor.getRightLeg() == null) {
+            sponsor.setRightLeg((newMember));
+            newMember.setParent(sponsor);
         }
         else {
-            if(superior.getLeftLeg().numberOfInferiors() > superior.getRightLeg().numberOfInferiors())
-                addDistributor(newMember, superior.getRightLeg());
+            if(sponsor.getLeftLeg().numberOfInferiors() > sponsor.getRightLeg().numberOfInferiors())
+                addDistributor(newMember, sponsor.getRightLeg());
             else {
-                addDistributor(newMember, superior.getLeftLeg());
+                addDistributor(newMember, sponsor.getLeftLeg());
             }
         }
     }
@@ -41,5 +62,13 @@ public class Company {
         return Distributor.find(boss, ID);
     }
 
+    /*public boolean deleteDistributor(Distributor d) {
+        if(!inCompany(d)) return false;
+        Distributor parent = d.getParent();
+        if(parent == null) boss = d;
+        if(d.getRightLeg() != null && d.getLeftLeg() != null) {
+            
+        }
+    }*/
 
 }

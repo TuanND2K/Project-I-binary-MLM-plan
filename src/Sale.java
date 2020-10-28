@@ -9,14 +9,22 @@ public class Sale {
 
     }
 
+    // thiet lap dot phan phoi moi
     public Sale(Company com, double price) {
         company = com;
         this.price = price;
+        setNewSale(com.getBoss());
+    }
+
+    public void setNewSale(Distributor boss) {
+        if(boss == null) return;
+        boss.setNumberOfProducts(0);
+        setNewSale(boss.getLeftLeg());
+        setNewSale(boss.getRightLeg());
     }
 
     public void saleResult(Distributor d) { // d should be boss
         if(d == null) return;
-
         saleResult(d.getLeftLeg());
         saleResult(d.getRightLeg());
         personalSaleResult(d);
@@ -24,7 +32,7 @@ public class Sale {
 
     public void personalSaleResult(Distributor d) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Amount of goods sold by " + d.getName() + " is: ");
+        System.out.print(d.getName() + " : ");
         int amount = sc.nextInt();
         d.setNumberOfProducts(amount);
     }
@@ -36,18 +44,18 @@ public class Sale {
         } else return levelCommissionRate * d.getLeftLeg().getNumberOfProducts() * price;
     }
 
-
-    public double totalProducts(Distributor d) {
+    public double totalProducts(Distributor d) { //O(n)
         if(d == null) return 0;
         int total = d.getNumberOfProducts();
         total += totalProducts(d.getLeftLeg()) + totalProducts(d.getRightLeg());
         return total;
     }
+
     public double saleCommission(Distributor d) {
         return d.getNumberOfProducts() * price * saleCommissionRate;
     }
 
-    public double commission(Distributor d) {
-        return saleCommission(d) + pairCommission(d);
+    public void commission(Distributor d) {
+        d.setCommission(saleCommission(d) + pairCommission(d));
     }
 }
