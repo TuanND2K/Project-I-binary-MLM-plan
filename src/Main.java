@@ -1,4 +1,4 @@
-import java.sql.SQLOutput;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,7 +20,23 @@ public class Main {
                 addNewMember();
             }
             if(option == 3) {
-                break;
+                System.out.println("Danh sach thanh vien hien tai: ");
+
+                for(Distributor d: currentCompany.getMemberList()) {
+                    System.out.println("ID " + d.getID() + " : " + d.getName());
+                }
+
+                System.out.println("Nhập ID của nhà phân phối cần xóa: ");
+                int ID = sc.nextInt();
+                sc.nextLine();
+                Distributor toDelete = currentCompany.find(ID);
+                System.out.println("Xóa nhà phân phối " + toDelete.getName());
+                currentCompany.deleteDistributor(toDelete);
+                System.out.println("Danh sach thanh vien sau khi xóa: ");
+
+                for(Distributor d: currentCompany.getMemberList()) {
+                    System.out.println("ID " + d.getID() + " : " + d.getName());
+                }
             }
             if(option == 4) {
                 saleManagement();
@@ -61,26 +77,30 @@ public class Main {
 
     public static void addNewMember() {
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("Danh sách nhà phân phối hiện tại: ");
-        int order = 0;
+
         for(Distributor d: currentCompany.getMemberList()) {
-            System.out.println(order + " : " + d.getName());
-            order++;
+            System.out.println("ID " + d.getID() + " : " + d.getName());
         }
-        System.out.print("Chọn nhà tài trợ (tu 0" + " den " + (currentCompany.getMemberList().size()-1) + ") : ");
-        int select = scanner.nextInt();
+
+        System.out.println("--------------");
+        System.out.print("Nhập ID nhà tài trợ: ");
+        int ID = scanner.nextInt();
         scanner.nextLine();
-        if(select > currentCompany.getMemberList().size()-1) {
+        Distributor sponsor = currentCompany.find(ID);
+        if(sponsor == null) {
             System.out.println("Lỗi !!!");
             return;
         }
         System.out.print("Nhập tên nhà phân phối mới: ");
         String name = scanner.nextLine();
         Distributor newMember = new Distributor(name);
-        Distributor sponsor = currentCompany.getMemberList().get(select);
+
         currentCompany.addDistributor(newMember, sponsor);
-        System.out.println("Đã thêm thành công nhà phân phối : " + newMember.getName() +
-                " với cấp trên là nhà phân phối " + sponsor.getName());
+
+        System.out.println("Đã thêm thành công nhà phân phối : " + newMember.getName() + " với ID " + newMember.getID() +
+                " có cấp trên là nhà phân phối " + sponsor.getName());
     }
 
     public static void saleManagement() {
@@ -95,8 +115,12 @@ public class Main {
             }
             if(option == 3) {
                 System.out.println("-----------------");
-                System.out.println("Nhập tình hình bán hàng hiện tại: ");
-                currentSale.saleResult(currentCompany.getBoss());
+                System.out.println("Danh sách nhà phân phối: ");
+                System.out.print("Chọn ID nhà phân phối cần cập nhật: ");
+                int ID = sc.nextInt();
+                sc.nextLine();
+                Distributor d = currentCompany.find(ID);
+                currentSale.personalSaleResult(d);
             }
 
             if(option == 4) {
@@ -126,6 +150,7 @@ public class Main {
         System.out.print("Chọn chức năng: ");
         int option = sc.nextInt();
         sc.nextLine();
+        System.out.println("================>");
         return option;
     }
 

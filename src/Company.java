@@ -62,13 +62,37 @@ public class Company {
         return Distributor.find(boss, ID);
     }
 
-    /*public boolean deleteDistributor(Distributor d) {
-        if(!inCompany(d)) return false;
+    public void deleteDistributor(Distributor d) {
+        memberList.remove(d);
+        Distributor toPromote = Distributor.distributorToPromote(d);
+        Distributor notPromote = (d.getLeftLeg() == toPromote) ? d.getRightLeg() : d.getLeftLeg();
         Distributor parent = d.getParent();
-        if(parent == null) boss = d;
-        if(d.getRightLeg() != null && d.getLeftLeg() != null) {
-            
+        if(parent != null) {
+            if(parent.getRightLeg() == d) {
+                parent.setRightLeg(toPromote);
+            } else parent.setLeftLeg(toPromote);
         }
-    }*/
+        if(toPromote != null) reorder(toPromote, notPromote);
+    }
+
+    private void reorder(Distributor d, Distributor e) {
+        if(e == null) return;
+        if(d.getLeftLeg() == null) d.setLeftLeg(e);
+        else if(d.getRightLeg() == null) d.setRightLeg(e);
+        else {
+            if(d.getRightLeg().getCommission() > d.getLeftLeg().getCommission()) {
+                Distributor old_left = d.getLeftLeg();
+                d.setLeftLeg(e);
+                reorder(e, old_left);
+            } else {
+                Distributor old_right = d.getRightLeg();
+                d.setRightLeg(e);
+                reorder(e, old_right);
+            }
+        }
+    }
+
+
+
 
 }

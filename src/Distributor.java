@@ -7,7 +7,7 @@ public class Distributor {
     private Distributor sponsor;
     private Distributor parent;
     private double commission;
-    private int numberOfProducts = 0;
+    private int productsSold = 0;
 
     public int getID() {
         return ID;
@@ -53,12 +53,12 @@ public class Distributor {
         this.commission = commission;
     }
 
-    public int getNumberOfProducts() {
-        return numberOfProducts;
+    public int getProductsSold() {
+        return productsSold;
     }
 
-    public void setNumberOfProducts(int numberOfProducts) {
-        this.numberOfProducts = numberOfProducts;
+    public void setProductsSold(int productsSold) {
+        this.productsSold = productsSold;
     }
 
     public Distributor getParent() {
@@ -89,7 +89,7 @@ public class Distributor {
         if(superior == null) return null;
         //System.out.println("superior name " + superior.getName());
         if(superior.getID() == ID) return superior;
-        Distributor found = null;
+        Distributor found;
         found = find(superior.getLeftLeg(), ID);
         if(found != null) return found;
         found = find(superior.getRightLeg(), ID);
@@ -103,4 +103,29 @@ public class Distributor {
         if(find(d2, d1.getID()) != null) return -1;
         return 0;
     }
+
+    public boolean isFullOfLeg() {
+        return getLeftLeg() != null && getRightLeg() != null;
+    }
+
+    public static Distributor distributorToPromote(Distributor d) {
+        Distributor distributorToPromote = null;
+        if(d.isFullOfLeg()) {
+            if(d.getRightLeg().getCommission() > d.getLeftLeg().getCommission()) {
+                distributorToPromote = d.getRightLeg();
+            }
+            else if(d.getRightLeg().getCommission() == d.getLeftLeg().getCommission()) {
+                if(d.getRightLeg().productsSold > d.getLeftLeg().productsSold)
+                    distributorToPromote = d.getRightLeg();
+                else distributorToPromote = d.getLeftLeg();
+            }
+            else distributorToPromote = d.getLeftLeg();
+        } else {
+            if(d.getLeftLeg() == null && d.getRightLeg() != null) distributorToPromote = d.getRightLeg();
+            if(d.getRightLeg() == null && d.getLeftLeg() != null) distributorToPromote = d.getLeftLeg();
+        }
+        return distributorToPromote;
+    }
+
+
 }

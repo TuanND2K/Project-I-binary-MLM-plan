@@ -18,7 +18,7 @@ public class Sale {
 
     public void setNewSale(Distributor boss) {
         if(boss == null) return;
-        boss.setNumberOfProducts(0);
+        boss.setProductsSold(0);
         setNewSale(boss.getLeftLeg());
         setNewSale(boss.getRightLeg());
     }
@@ -32,27 +32,28 @@ public class Sale {
 
     public void personalSaleResult(Distributor d) {
         Scanner sc = new Scanner(System.in);
-        System.out.print(d.getName() + " : ");
+        System.out.print(d.getName() + " đã bán được thêm: ");
         int amount = sc.nextInt();
-        d.setNumberOfProducts(amount);
+        int curr = d.getProductsSold();
+        d.setProductsSold(curr + amount);
     }
 
     public double pairCommission(Distributor d) {
         if(d.getLeftLeg() == null || d.getRightLeg() == null) return 0;
         if(totalProducts(d.getLeftLeg()) > totalProducts(d.getRightLeg())) {
-           return levelCommissionRate * d.getRightLeg().getNumberOfProducts() * price;
-        } else return levelCommissionRate * d.getLeftLeg().getNumberOfProducts() * price;
+           return levelCommissionRate * totalProducts(d.getRightLeg()) * price;
+        } else return levelCommissionRate * totalProducts(d.getLeftLeg()) * price;
     }
 
     public double totalProducts(Distributor d) { //O(n)
         if(d == null) return 0;
-        int total = d.getNumberOfProducts();
+        int total = d.getProductsSold();
         total += totalProducts(d.getLeftLeg()) + totalProducts(d.getRightLeg());
         return total;
     }
 
     public double saleCommission(Distributor d) {
-        return d.getNumberOfProducts() * price * saleCommissionRate;
+        return d.getProductsSold() * price * saleCommissionRate;
     }
 
     public void commission(Distributor d) {
