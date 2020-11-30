@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 
-public class Company {
-
+/**
+ * 1 Branch(chi nhanh cua 1 cong ty) la 1 cay nhi phan
+ */
+public class Branch {
     private Distributor boss;
     private String name;
     private ArrayList<Distributor> memberList;
@@ -10,10 +12,10 @@ public class Company {
         return boss;
     }
 
-    public Company() {
+    public Branch() {
 
     }
-    public Company(Distributor boss, String name) {
+    public Branch(Distributor boss, String name) {
         this.boss = boss;
         this.name = name;
         memberList = new ArrayList<>();
@@ -32,13 +34,20 @@ public class Company {
         this.name = name;
     }
 
-    public boolean inCompany(Distributor d) {
-        //System.out.println(d.getName());
-        return Distributor.relation(boss, d) == 1;
-    }
-
-    public void addDistributor(Distributor newMember, Distributor sponsor) {
-        if(!inCompany(sponsor)) return;
+    private void add(Distributor newMember, Distributor sponsor) {
+        if(sponsor.getParent() != null) {
+            Distributor p = sponsor.getParent();
+            if(p.getLeftLeg() == null) {
+                p.setLeftLeg(newMember);
+                newMember.setParent(p);
+                return;
+            }
+            if(p.getRightLeg() == null) {
+                p.setRightLeg(newMember);
+                newMember.setParent(p);
+                return;
+            }
+        }
         if(!memberList.contains(newMember)) memberList.add(newMember);
         if(newMember.getSponsor() == null) newMember.setSponsor(sponsor);
         if(sponsor.getLeftLeg() == null) {
@@ -57,11 +66,34 @@ public class Company {
             }
         }
     }
+    public void addDistributor(Distributor newMember, Distributor sponsor) {
+        if(!checkForAdd(sponsor)) {
+            System.out.println("Không thể thêm do chênh lệch lớn");
+        }
+        else add(newMember, sponsor);
+    }
 
+    public boolean checkForAdd(Distributor sponsor) {
+        if(sponsor.getParent() == null) return true;
+        Distributor p = sponsor.getParent();
+        int a1 = sponsor.numberOfInferiors();
+        int a2;
+        if(p.getRightLeg() == null || p.getLeftLeg() == null) a2 = 0;
+        else if(p.getRightLeg() != sponsor) a2 = p.getRightLeg().numberOfInferiors();
+        else a2 = p.getLeftLeg().numberOfInferiors();
+        final int MAX_DISPARITY = 4;
+        return a1 - a2 < MAX_DISPARITY;
+    }
+    /**
+     *tim nha phan phoi voi ID cho truoc trong chi nhanh
+     */
     public Distributor find(int ID) {
         return Distributor.find(boss, ID);
     }
 
+    /**
+     *xoa nha phan phoi khoi cay nhi phan
+     */
     public void deleteDistributor(Distributor d) {
         memberList.remove(d);
         Distributor toPromote = Distributor.distributorToPromote(d);
@@ -75,6 +107,9 @@ public class Company {
         if(toPromote != null) reorder(toPromote, notPromote);
     }
 
+    /**
+     * sap xep lai thu tu cac node sau khi xoa 1 nha phan phoi
+     */
     private void reorder(Distributor d, Distributor e) {
         if(e == null) return;
         if(d.getLeftLeg() == null) d.setLeftLeg(e);
@@ -91,8 +126,4 @@ public class Company {
             }
         }
     }
-
-
-
-
 }

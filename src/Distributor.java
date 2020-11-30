@@ -78,6 +78,11 @@ public class Distributor {
         this.name = name;
     }
 
+
+    /**
+     * tra ve so nha phan phoi cap duoi cua nha phan phoi dang xet
+     */
+
     public int numberOfInferiors() {
         int count = 0;
         if(leftLeg != null) count += 1 + leftLeg.numberOfInferiors();
@@ -85,6 +90,12 @@ public class Distributor {
         return count;
     }
 
+
+    /**
+     * tim nha phan phoi trong cay nhi phan biet cap tren va ID
+     * @param superior doi tuong nha phan phoi cap tren
+     * @param ID ID cua nha phan phoi can tim
+     */
     public static Distributor find(Distributor superior, int ID) {
         if(superior == null) return null;
         //System.out.println("superior name " + superior.getName());
@@ -96,8 +107,13 @@ public class Distributor {
         return found;
     }
 
-    // relation between d1 and d2
-    // return 1 if d1 if superior of d2, -1 if d1 is inferior of d2, 0 otherwise
+
+    /**
+     * quan he giua 2 nha phan phoi d1 va d2
+     * tra ve: 1 - d1 la cap tren cua d2
+     *         -1 - d1 la cap duoi cua d2
+     *         0 - neu khong co lien he giua d1 va d2
+    */
     public static int relation(Distributor d1, Distributor d2) {
         if(find(d1, d2.getID()) != null) return 1;
         if(find(d2, d1.getID()) != null) return -1;
@@ -108,6 +124,9 @@ public class Distributor {
         return getLeftLeg() != null && getRightLeg() != null;
     }
 
+    /**
+     * nha phan phoi thay the vi tri cua nha phan phoi d, trong truong hop xoa d khoi cay
+     */
     public static Distributor distributorToPromote(Distributor d) {
         Distributor distributorToPromote = null;
         if(d.isFullOfLeg()) {
@@ -115,9 +134,9 @@ public class Distributor {
                 distributorToPromote = d.getRightLeg();
             }
             else if(d.getRightLeg().getCommission() == d.getLeftLeg().getCommission()) {
-                if(d.getRightLeg().productsSold > d.getLeftLeg().productsSold)
+                if(d.getRightLeg().productsSold > d.getLeftLeg().productsSold) {
                     distributorToPromote = d.getRightLeg();
-                else distributorToPromote = d.getLeftLeg();
+                } else distributorToPromote = d.getLeftLeg();
             }
             else distributorToPromote = d.getLeftLeg();
         } else {
