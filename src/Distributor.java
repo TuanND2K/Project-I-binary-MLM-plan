@@ -17,10 +17,6 @@ public class Distributor {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Distributor getLeftLeg() {
         return leftLeg;
     }
@@ -107,19 +103,6 @@ public class Distributor {
         return found;
     }
 
-
-    /**
-     * quan he giua 2 nha phan phoi d1 va d2
-     * tra ve: 1 - d1 la cap tren cua d2
-     *         -1 - d1 la cap duoi cua d2
-     *         0 - neu khong co lien he giua d1 va d2
-    */
-    public static int relation(Distributor d1, Distributor d2) {
-        if(find(d1, d2.getID()) != null) return 1;
-        if(find(d2, d1.getID()) != null) return -1;
-        return 0;
-    }
-
     public boolean isFullOfLeg() {
         return getLeftLeg() != null && getRightLeg() != null;
     }
@@ -146,5 +129,10 @@ public class Distributor {
         return distributorToPromote;
     }
 
+    public String toString() {
+        String information = ID + ", " + name + ", "
+               + sponsor.getID() + ", " + parent.getID() + "\n";
+        return information;
+    }
 
 }

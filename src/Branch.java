@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ public class Branch {
     private Distributor boss;
     private String name;
     private ArrayList<Distributor> memberList;
-
+    private File storeFile;
     public Distributor getBoss() {
         return boss;
     }
@@ -20,6 +21,7 @@ public class Branch {
         this.name = name;
         memberList = new ArrayList<>();
         memberList.add(boss);
+        storeFile = StoreData.makeFile(this);
     }
 
     public ArrayList<Distributor> getMemberList() {
@@ -30,9 +32,7 @@ public class Branch {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) {this.name = name;}
 
     private void add(Distributor newMember, Distributor sponsor) {
         if(sponsor.getParent() != null) {
@@ -48,7 +48,6 @@ public class Branch {
                 return;
             }
         }
-        if(!memberList.contains(newMember)) memberList.add(newMember);
         if(newMember.getSponsor() == null) newMember.setSponsor(sponsor);
         if(sponsor.getLeftLeg() == null) {
             sponsor.setLeftLeg(newMember);
@@ -70,7 +69,11 @@ public class Branch {
         if(!checkForAdd(sponsor)) {
             System.out.println("Không thể thêm do chênh lệch lớn");
         }
-        else add(newMember, sponsor);
+        else {
+            memberList.add(newMember);
+            add(newMember, sponsor);
+            StoreData.addInfor(storeFile, newMember);
+        }
     }
 
     public boolean checkForAdd(Distributor sponsor) {

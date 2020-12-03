@@ -68,7 +68,6 @@ public class Sale {
         return d.getProductsSold() * price * saleCommissionRate;
     }
 
-
     /**
      * tong hoa hong duoc nhan cua 1 nha phan phoi
      */

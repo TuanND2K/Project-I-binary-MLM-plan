@@ -139,8 +139,6 @@ public class Main {
             }
             if(option == 5) break;
         }
-
-
     }
 
     public static int saleOption() {
