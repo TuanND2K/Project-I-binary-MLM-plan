@@ -127,7 +127,6 @@ public class Branch {
      * sap xep lai thu tu cac node sau khi xoa 1 nha phan phoi
      */
     private void reorder(Distributor d, Distributor e) {
-        System.out.println("here");
         if(d.getLeftLeg() == null) {
             d.setLeftLeg(e);
             e.setParent(d);

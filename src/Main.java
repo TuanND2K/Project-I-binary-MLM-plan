@@ -115,12 +115,11 @@ public class Main {
                 currentBranch.addDistributor(newMember, nguoiGioiThieu);
                 try {
                     conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=QuanLyToChuc;integratedSecurity=true;");
-                    query = conn.prepareStatement("insert into NhaPhanPhoi(MaNPP, HoTen, NguoiGioiThieu, CapTren, ChiNhanh) values(?, ?, ?, ?, ?)");
+                    query = conn.prepareStatement("insert into NhaPhanPhoi(MaNPP, HoTen, CapTren, ChiNhanh) values(?, ?, ?, ?)");
                     query.setInt(1, newMember.getID());
                     query.setString(2, name);
-                    query.setInt(3, newMember.getSponsor().getID());
-                    query.setInt(4, newMember.getParent().getID());
-                    query.setInt(5, newMember.getBranchID());
+                    query.setInt(3, newMember.getParent().getID());
+                    query.setInt(4, newMember.getBranchID());
                     query.executeUpdate();
                     distributorTableUpdate();
                     JOptionPane.showMessageDialog(null, "Added");
@@ -168,6 +167,10 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int ID = Integer.parseInt(idText.getText());
+                if(currentBranch.find(ID) == null) {
+                    JOptionPane.showMessageDialog(null, "ID không hợp lệ");
+                    return;
+                }
                 int update = Integer.parseInt(updateText.getText());
                 try {
                     conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;database=QuanLyToChuc;integratedSecurity = true;");
@@ -210,16 +213,18 @@ public class Main {
                 idMemberText.setText(model.getValueAt(selectedIndex, 0).toString());
                 nameText.setText(model.getValueAt(selectedIndex, 1).toString());
                 if(model.getValueAt(selectedIndex, 2) != null)
-                    idSponsorText.setText(model.getValueAt(selectedIndex, 2).toString());
-                else idSponsorText.setText("");
-                if(model.getValueAt(selectedIndex, 3) != null)
-                    idParentText.setText(model.getValueAt(selectedIndex, 3).toString());
+                    idParentText.setText(model.getValueAt(selectedIndex, 2).toString());
                 else idParentText.setText("");
+                idSponsorText.setText("");
             }
         });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(currentBranch.getMemberList().size() == 1) {
+                    JOptionPane.showMessageDialog(null, "Chỉ còn 1 thành viên");
+                    return;
+                }
                 int ID = Integer.parseInt(idMemberText.getText());
                 Distributor delete = currentBranch.find(ID);
                 currentBranch.deleteDistributor(delete);
@@ -383,7 +388,10 @@ public class Main {
             query = conn.prepareStatement("update NhaPhanPhoi set CapTren = ? where MaNPP = ?");
             int parentID = 0;
             if(d.getParent() != null) parentID = d.getParent().getID();
-            query.setInt(1, parentID);
+            if(parentID == 0)
+                query.setNull(1, Types.NULL);
+            else
+                query.setInt(1, parentID);
             query.setInt(2, d.getID());
             query.executeUpdate();
         } catch(SQLException e){

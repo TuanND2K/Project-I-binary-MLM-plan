@@ -19,7 +19,7 @@
             </constraints>
             <properties>
               <font name="Arial Black" size="18" style="1"/>
-              <text value="Quàn lý tổ chức đa cấp"/>
+              <text value="Quản lý tổ chức đa cấp"/>
             </properties>
           </component>
         </children>
@@ -35,7 +35,9 @@
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <background color="-4473925"/>
+            </properties>
             <border type="none" title="Tạo chi nhánh"/>
             <children>
               <grid id="448b3" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -43,8 +45,10 @@
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
-                <border type="none"/>
+                <properties>
+                  <background color="-4473925"/>
+                </properties>
+                <border type="line"/>
                 <children>
                   <component id="5d27f" class="javax.swing.JLabel">
                     <constraints>
@@ -82,7 +86,9 @@
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <background color="-4473925"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="8fe31" class="javax.swing.JButton" binding="createBranchButton">
@@ -110,9 +116,9 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <background color="-12828863"/>
+                  <background color="-4473925"/>
                 </properties>
-                <border type="none" title="Danh sách chi nhánh"/>
+                <border type="line" title="Danh sách chi nhánh"/>
                 <children>
                   <component id="410b1" class="javax.swing.JTable" binding="dsChiNhanh">
                     <constraints/>
@@ -134,8 +140,10 @@
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
-                <border type="none" title="Danh sách thành viên"/>
+                <properties>
+                  <background color="-4473925"/>
+                </properties>
+                <border type="line" title="Danh sách thành viên"/>
                 <children>
                   <component id="9662d" class="javax.swing.JTable" binding="dsThanhVien">
                     <constraints/>
@@ -157,8 +165,10 @@
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
-                <border type="none" title="Đợt phân phối hiện tại"/>
+                <properties>
+                  <background color="-4473925"/>
+                </properties>
+                <border type="line" title="Đợt phân phối hiện tại"/>
                 <children>
                   <component id="23e3f" class="javax.swing.JTable" binding="dsBanHang">
                     <constraints/>
@@ -174,15 +184,17 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
-            <border type="none" title="Quản lý bán hàng"/>
+            <border type="line" title="Quản lý bán hàng"/>
             <children>
               <grid id="d4935" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
-                <border type="none" title="Cập nhật hàng bán được"/>
+                <properties>
+                  <background color="-4473925"/>
+                </properties>
+                <border type="line" title="Cập nhật hàng bán được"/>
                 <children>
                   <component id="4300f" class="javax.swing.JLabel">
                     <constraints>
@@ -220,7 +232,9 @@
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <background color="-4473925"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="f64e0" class="javax.swing.JButton" binding="saleUpdateButton">
@@ -238,8 +252,10 @@
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
-                <border type="none" title="Đợt phân phối mới"/>
+                <properties>
+                  <background color="-4473925"/>
+                </properties>
+                <border type="line" title="Đợt phân phối mới"/>
                 <children>
                   <component id="2865a" class="javax.swing.JLabel">
                     <constraints>
@@ -261,7 +277,9 @@
                     <constraints>
                       <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <background color="-4473925"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="77b07" class="javax.swing.JButton" binding="newSaleButton">
@@ -281,8 +299,10 @@
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
-            <border type="none" title="Quản lý thành viên"/>
+            <properties>
+              <background color="-4473925"/>
+            </properties>
+            <border type="line" title="Quản lý thành viên"/>
             <children>
               <component id="a755c" class="javax.swing.JLabel">
                 <constraints>
@@ -354,7 +374,9 @@
                 <constraints>
                   <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <background color="-4473925"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="765dc" class="javax.swing.JButton" binding="addButton">
