@@ -1,38 +1,35 @@
-import java.io.File;
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
  * 1 Branch(chi nhanh cua 1 cong ty) la 1 cay nhi phan
  */
 public class Branch {
-    private Distributor boss;
+    private final int ID;
+    private static int IDset = 0;
+    private Distributor manager;
     private String name;
     private ArrayList<Distributor> memberList;
-    private File storeFile;
-    public Distributor getBoss() {
-        return boss;
+    public Distributor getManager() {
+        return manager;
     }
 
-    public Branch() {
-
-    }
     public Branch(Distributor boss, String name) {
-        this.boss = boss;
+        IDset++;
+        ID = IDset;
+        this.manager = boss;
         this.name = name;
         memberList = new ArrayList<>();
         memberList.add(boss);
-        storeFile = StoreData.makeFile(this);
     }
 
+    public int getID() {
+        return ID;
+    }
+    public String getName() {return name;}
     public ArrayList<Distributor> getMemberList() {
         return memberList;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {this.name = name;}
 
     private void add(Distributor newMember, Distributor sponsor) {
         if(sponsor.getParent() != null) {
@@ -59,24 +56,29 @@ public class Branch {
         }
         else {
             if(sponsor.getLeftLeg().numberOfInferiors() > sponsor.getRightLeg().numberOfInferiors())
-                addDistributor(newMember, sponsor.getRightLeg());
+                add(newMember, sponsor.getRightLeg());
             else {
-                addDistributor(newMember, sponsor.getLeftLeg());
+                add(newMember, sponsor.getLeftLeg());
             }
         }
     }
     public void addDistributor(Distributor newMember, Distributor sponsor) {
-        if(!checkForAdd(sponsor)) {
-            System.out.println("Không thể thêm do chênh lệch lớn");
-        }
-        else {
-            memberList.add(newMember);
-            add(newMember, sponsor);
-            StoreData.addInfor(storeFile, newMember);
-        }
+        memberList.add(newMember);
+        add(newMember, sponsor);
+        newMember.setBranchID(sponsor.getBranchID());
+        newMember.setSponsor(sponsor);
     }
 
     public boolean checkForAdd(Distributor sponsor) {
+        while(sponsor != null) {
+            if(!checkAdd(sponsor))
+                return false;
+            sponsor = sponsor.getParent();
+        }
+        return true;
+    }
+
+    private boolean checkAdd(Distributor sponsor) {
         if(sponsor.getParent() == null) return true;
         Distributor p = sponsor.getParent();
         int a1 = sponsor.numberOfInferiors();
@@ -91,7 +93,7 @@ public class Branch {
      *tim nha phan phoi voi ID cho truoc trong chi nhanh
      */
     public Distributor find(int ID) {
-        return Distributor.find(boss, ID);
+        return Distributor.find(manager, ID);
     }
 
     /**
@@ -100,23 +102,42 @@ public class Branch {
     public void deleteDistributor(Distributor d) {
         memberList.remove(d);
         Distributor toPromote = Distributor.distributorToPromote(d);
+        if(toPromote == null) {
+            return;
+        }
         Distributor notPromote = (d.getLeftLeg() == toPromote) ? d.getRightLeg() : d.getLeftLeg();
         Distributor parent = d.getParent();
         if(parent != null) {
             if(parent.getRightLeg() == d) {
                 parent.setRightLeg(toPromote);
-            } else parent.setLeftLeg(toPromote);
+            } else {
+                parent.setLeftLeg(toPromote);
+            }
+            toPromote.setParent(parent);
+        } else {
+            manager = toPromote;
+            Main.updateManager(this);
+            toPromote.setParent(null);
         }
-        if(toPromote != null) reorder(toPromote, notPromote);
+        Main.updateParent(toPromote);
+        if(notPromote != null) reorder(toPromote, notPromote);
     }
 
     /**
      * sap xep lai thu tu cac node sau khi xoa 1 nha phan phoi
      */
     private void reorder(Distributor d, Distributor e) {
-        if(e == null) return;
-        if(d.getLeftLeg() == null) d.setLeftLeg(e);
-        else if(d.getRightLeg() == null) d.setRightLeg(e);
+        System.out.println("here");
+        if(d.getLeftLeg() == null) {
+            d.setLeftLeg(e);
+            e.setParent(d);
+            Main.updateParent(e);
+        }
+        else if(d.getRightLeg() == null) {
+            d.setRightLeg(e);
+            e.setParent(d);
+            Main.updateParent(e);
+        }
         else {
             if(d.getRightLeg().getCommission() > d.getLeftLeg().getCommission()) {
                 Distributor old_left = d.getLeftLeg();

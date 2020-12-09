@@ -1,46 +1,26 @@
-import java.util.Scanner;
-
 public class Sale {
+    public static int order = 1;
     public static final double saleCommissionRate = 0.1;
     public static final double levelCommissionRate = 0.1;
     private double price;
     Branch branch;
 
-    public Sale() {
-
-    }
-
     public Sale(Branch b, double price) {
         branch = b;
         this.price = price;
-        setNewSale(b.getBoss());
     }
 
-    public void setNewSale(Distributor boss) {
-        if(boss == null) return;
-        boss.setProductsSold(0);
-        setNewSale(boss.getLeftLeg());
-        setNewSale(boss.getRightLeg());
+    public void setPrice(int price) {
+        this.price = price;
     }
 
-//    public void saleResult(Distributor d) { // d should be boss
-//        if(d == null) return;
-//        saleResult(d.getLeftLeg());
-//        saleResult(d.getRightLeg());
-//        updateSaleResult(d);
-//    }
-
-    /**
-     * cap nhat so hang ban duoc cua 1 nha phan phoi
-     */
-    public void updateSaleResult(Distributor d) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print(d.getName() + " đã bán được thêm: ");
-        int amount = sc.nextInt();
-        int curr = d.getProductsSold();
-        d.setProductsSold(curr + amount);
+    public int getOrder() {
+        return order;
     }
 
+    public void setOrder() {
+        order++;
+    }
     /**
      * hoa hong thu duoc tu viec ban hang cua cac nha phan phoi cap duoi
      */

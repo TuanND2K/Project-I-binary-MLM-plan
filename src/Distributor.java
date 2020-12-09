@@ -6,6 +6,7 @@ public class Distributor {
     private Distributor rightLeg;
     private Distributor sponsor;
     private Distributor parent;
+    private int branchID;
     private double commission;
     private int productsSold = 0;
 
@@ -17,6 +18,11 @@ public class Distributor {
         return name;
     }
 
+    public void setBranchID(int branchID) {
+        this.branchID = branchID;
+    }
+
+    public int getBranchID() {return branchID;}
     public Distributor getLeftLeg() {
         return leftLeg;
     }
@@ -111,6 +117,7 @@ public class Distributor {
      * nha phan phoi thay the vi tri cua nha phan phoi d, trong truong hop xoa d khoi cay
      */
     public static Distributor distributorToPromote(Distributor d) {
+
         Distributor distributorToPromote = null;
         if(d.isFullOfLeg()) {
             if(d.getRightLeg().getCommission() > d.getLeftLeg().getCommission()) {
