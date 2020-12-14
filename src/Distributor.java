@@ -70,10 +70,10 @@ public class Distributor {
     public void setParent(Distributor parent) {
         this.parent = parent;
     }
-    public Distributor() {
 
+    public void reset() {
+        IDSetter = 0;
     }
-
     public Distributor(String name) {
         IDSetter++;
         ID = IDSetter;
@@ -135,11 +135,4 @@ public class Distributor {
         }
         return distributorToPromote;
     }
-
-    public String toString() {
-        String information = ID + ", " + name + ", "
-               + sponsor.getID() + ", " + parent.getID() + "\n";
-        return information;
-    }
-
 }

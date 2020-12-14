@@ -32,6 +32,8 @@ public class Main {
     private JTextField updateText;
     private JButton saleUpdateButton;
     private JTextField idMemberText;
+    private JButton resetButton;
+    private JLabel displayInfor;
 
     private Connection conn;
     PreparedStatement query;
@@ -76,6 +78,8 @@ public class Main {
                     query.executeUpdate();
 
                     currentBranch = branch;
+                    branchNameText.setText("");
+                    managerNameText.setText("");
 
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -88,6 +92,7 @@ public class Main {
                         ex.printStackTrace();
                     }
                 }
+                displayInfor.setText("Chi nhánh: " + branchName + "-----Quản lý: " + managerName);
                 branchTableUpdate();
                 distributorTableUpdate();
                 JOptionPane.showMessageDialog(null, "Created successfully");
@@ -123,6 +128,10 @@ public class Main {
                     query.executeUpdate();
                     distributorTableUpdate();
                     JOptionPane.showMessageDialog(null, "Added");
+                    nameText.setText("");
+                    idSponsorText.setText("");
+                    idMemberText.setText("");
+                    idParentText.setText("");
                 }
                 catch(Exception ex) {
                     ex.printStackTrace();
@@ -139,7 +148,9 @@ public class Main {
                     currentSale.setOrder();
                 }
 
-                else currentSale = new Sale(currentBranch, price);
+                else {
+                    currentSale = new Sale(currentBranch, price);
+                }
                 try {
                     conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=QuanLyToChuc;integratedSecurity=true;");
                     query = conn.prepareStatement("insert into DotPhanPhoi(MaDot, GiaMatHang) values (?, ?)");
@@ -156,6 +167,7 @@ public class Main {
                         query.setInt(4, 0);
                         query.executeUpdate();
                     }
+                    //priceText.setText("");
                     saleTableUpdate();
                 }
                 catch(Exception ex) {
@@ -196,7 +208,8 @@ public class Main {
                         d = d.getParent();
                      } while(d != null);
 
-
+                    idText.setText("");
+                    updateText.setText("");
                     saleTableUpdate();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -250,12 +263,48 @@ public class Main {
                     query = conn.prepareStatement("delete from NhaPhanPhoi where MaNPP = ?");
                     query.setInt(1, ID);
                     query.executeUpdate();
+
+                    nameText.setText("");
+                    idSponsorText.setText("");
+                    idMemberText.setText("");
+                    idParentText.setText("");
                 } catch(Exception ex) {
                     ex.printStackTrace();
                 }
                 distributorTableUpdate();
                 saleTableUpdate();
                 branchTableUpdate();
+            }
+        });
+
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;database=QuanLyToChuc;integratedSecurity = true;");
+                    query = conn.prepareStatement("delete from PhanPhoi where MaNPP > 0");
+                    query.executeUpdate();
+
+                    query = conn.prepareStatement("delete from DotPhanPhoi where MaDot >= 0;");
+                    query.executeUpdate();
+
+                    query = conn.prepareStatement("update ChiNhanh set QuanLy = NULL where MaChiNhanh > 0;");
+                    query.executeUpdate();
+
+                    query = conn.prepareStatement("delete from NhaPhanPhoi where MaNPP > 0;");
+                    query.executeUpdate();
+
+                    query = conn.prepareStatement("delete from ChiNhanh where MaChiNhanh > 0;");
+                    query.executeUpdate();
+
+                    currentBranch = null;
+                    currentSale = null;
+
+                    initTable();
+                    displayInfor.setText("");
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
@@ -279,6 +328,7 @@ public class Main {
 
             ResultSetMetaData metaData = res.getMetaData();
             column = metaData.getColumnCount();
+
             DefaultTableModel model = (DefaultTableModel) dsChiNhanh.getModel();
             model.setRowCount(0);
 
@@ -337,6 +387,7 @@ public class Main {
 
             ResultSetMetaData metaData = res.getMetaData();
             column = metaData.getColumnCount();
+            System.out.println("column = " + column);
             DefaultTableModel model = (DefaultTableModel) dsBanHang.getModel();
             model.setRowCount(0);
 

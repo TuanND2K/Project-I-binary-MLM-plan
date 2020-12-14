@@ -8,6 +8,7 @@ public class Sale {
     public Sale(Branch b, double price) {
         branch = b;
         this.price = price;
+        reset();
     }
 
     public void setPrice(int price) {
@@ -53,5 +54,11 @@ public class Sale {
      */
     public void commission(Distributor d) {
         d.setCommission(saleCommission(d) + pairCommission(d));
+    }
+
+    public void reset() {
+        for(Distributor d: branch.getMemberList()) {
+            d.setProductsSold(0);
+        }
     }
 }
