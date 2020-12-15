@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -34,6 +35,7 @@ public class Main {
     private JTextField idMemberText;
     private JButton resetButton;
     private JLabel displayInfor;
+    private JButton displayTreeButton;
 
     private Connection conn;
     PreparedStatement query;
@@ -297,14 +299,29 @@ public class Main {
                     query = conn.prepareStatement("delete from ChiNhanh where MaChiNhanh > 0;");
                     query.executeUpdate();
 
+                    Branch.reset();
+                    Distributor.reset();
                     currentBranch = null;
                     currentSale = null;
 
                     initTable();
+
                     displayInfor.setText("");
                 } catch(Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        displayTreeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(currentBranch == null) return;
+                currentBranch.totalNodes = 0;
+                currentBranch.computeNodePositions(); //finds x,y positions of the tree nodes
+                currentBranch.maxHeight=currentBranch.treeHeight(currentBranch.getManager()); //finds tree height for scaling y axis
+                DisplayTree dt = new DisplayTree(currentBranch);//get a display panel
+                dt.setBackground(Color.DARK_GRAY);
+                dt.setVisible(true); //show the display
             }
         });
     }
@@ -387,7 +404,6 @@ public class Main {
 
             ResultSetMetaData metaData = res.getMetaData();
             column = metaData.getColumnCount();
-            System.out.println("column = " + column);
             DefaultTableModel model = (DefaultTableModel) dsBanHang.getModel();
             model.setRowCount(0);
 

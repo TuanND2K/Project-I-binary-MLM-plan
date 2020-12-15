@@ -14,6 +14,10 @@ public class Branch {
         return manager;
     }
 
+    //only for display
+    int totalNodes = 0;
+    int maxHeight = 0;
+
     public Branch(Distributor boss, String name) {
         IDset++;
         ID = IDset;
@@ -30,7 +34,7 @@ public class Branch {
     public ArrayList<Distributor> getMemberList() {
         return memberList;
     }
-
+    public static void reset() { IDset = 0;}
     private void add(Distributor newMember, Distributor sponsor) {
         if(sponsor.getParent() != null) {
             Distributor p = sponsor.getParent();
@@ -147,6 +151,32 @@ public class Branch {
                 d.setRightLeg(e);
                 reorder(e, old_right);
             }
+        }
+    }
+
+    public String toString() {
+        return "Chi nhánh: " + name;
+    }
+    public int treeHeight(Distributor d){
+        if(d==null)
+            return -1;
+        else
+            return 1 + Math.max(treeHeight(d.getLeftLeg()),treeHeight(d.getRightLeg()));
+    }
+
+    public void computeNodePositions() {
+        int depth = 1;
+        inorder_traversal(manager, depth);
+    }
+
+    //travel tree and computes x,y position of each node, stores it in the node
+    public void inorder_traversal(Distributor d, int depth) {
+        if (d != null) {
+            inorder_traversal(d.getLeftLeg(), depth + 1); //add 1 to depth (y coordinate)
+            totalNodes++;
+            d.xpos = totalNodes; //x coord is node number in inorder traversal
+            d.ypos = depth; // mark y coord as depth
+            inorder_traversal(d.getRightLeg(), depth + 1);
         }
     }
 }

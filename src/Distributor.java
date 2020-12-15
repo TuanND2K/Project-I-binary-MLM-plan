@@ -10,6 +10,10 @@ public class Distributor {
     private double commission;
     private int productsSold = 0;
 
+    int xpos;
+    int ypos;
+
+
     public int getID() {
         return ID;
     }
@@ -71,7 +75,7 @@ public class Distributor {
         this.parent = parent;
     }
 
-    public void reset() {
+    public static void reset() {
         IDSetter = 0;
     }
     public Distributor(String name) {
