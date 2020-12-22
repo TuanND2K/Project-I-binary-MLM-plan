@@ -28,8 +28,8 @@ public class Sale {
     public double pairCommission(Distributor d) {
         if(d.getLeftLeg() == null || d.getRightLeg() == null) return 0;
         if(totalProducts(d.getLeftLeg()) > totalProducts(d.getRightLeg())) {
-           return levelCommissionRate * totalProducts(d.getRightLeg()) * price;
-        } else return levelCommissionRate * totalProducts(d.getLeftLeg()) * price;
+           return levelCommissionRate * d.getRightLeg().getCommission();
+        } else return levelCommissionRate * d.getLeftLeg().getCommission();
     }
 
     /**

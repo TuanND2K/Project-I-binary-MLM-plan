@@ -90,7 +90,7 @@ public class Branch {
         if(p.getRightLeg() == null || p.getLeftLeg() == null) a2 = 0;
         else if(p.getRightLeg() != sponsor) a2 = p.getRightLeg().numberOfInferiors();
         else a2 = p.getLeftLeg().numberOfInferiors();
-        final int MAX_DISPARITY = 4;
+        final int MAX_DISPARITY = 2;
         return a1 - a2 < MAX_DISPARITY;
     }
     /**
@@ -107,6 +107,12 @@ public class Branch {
         memberList.remove(d);
         Distributor toPromote = Distributor.distributorToPromote(d);
         if(toPromote == null) {
+            if(d.getParent() != null) {
+                Distributor parent = d.getParent();
+                if(parent.getLeftLeg() == d)
+                    parent.setLeftLeg(null);
+                else parent.setRightLeg(null);
+            }
             return;
         }
         Distributor notPromote = (d.getLeftLeg() == toPromote) ? d.getRightLeg() : d.getLeftLeg();
@@ -145,10 +151,14 @@ public class Branch {
             if(d.getRightLeg().getCommission() > d.getLeftLeg().getCommission()) {
                 Distributor old_left = d.getLeftLeg();
                 d.setLeftLeg(e);
+                e.setParent(d);
+                Main.updateParent(e);
                 reorder(e, old_left);
             } else {
                 Distributor old_right = d.getRightLeg();
                 d.setRightLeg(e);
+                e.setParent(d);
+                Main.updateParent(e);
                 reorder(e, old_right);
             }
         }
@@ -167,6 +177,7 @@ public class Branch {
     public void computeNodePositions() {
         int depth = 1;
         inorder_traversal(manager, depth);
+        //System.out.println("current nodes: " + totalNodes);
     }
 
     //travel tree and computes x,y position of each node, stores it in the node

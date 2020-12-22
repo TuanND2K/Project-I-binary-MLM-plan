@@ -128,7 +128,19 @@ public class Main {
                     query.setInt(3, newMember.getParent().getID());
                     query.setInt(4, newMember.getBranchID());
                     query.executeUpdate();
+                    if(currentSale != null) {
+                        query = conn.prepareStatement("insert into PhanPhoi(MaDot, MaNPP, SLDaBan, HoaHong) values(?, ?, ?, ?)");
+
+                        query.setInt(1, currentSale.getOrder());
+                        query.setInt(2, newMember.getID());
+                        query.setInt(3, newMember.getProductsSold());
+                        query.setDouble(4, newMember.getCommission());
+
+                        query.executeUpdate();
+                    }
+
                     distributorTableUpdate();
+                    saleTableUpdate();
                     JOptionPane.showMessageDialog(null, "Added");
                     nameText.setText("");
                     idSponsorText.setText("");
@@ -257,6 +269,7 @@ public class Main {
                             query.executeUpdate();
                         }
                     }
+
 
                     query = conn.prepareStatement("delete from PhanPhoi where MaNPP = ?");
                     query.setInt(1, ID);
@@ -447,7 +460,7 @@ public class Main {
         dsBanHang.setModel(model);
     }
     public static void updateParent(Distributor d) {
-        System.out.println("update parent");
+        //System.out.println("update parent for " + d.getName());
         Connection conn;
         PreparedStatement query;
         try {
